@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050a07">
+  <title>Mellstroy RNG</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="background-glow"></div>
+
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <div class="logo">M<span>RNG</span></div>
+      <p class="subtitle">MELLSTROY RANDOM GENERATOR</p>
+      <h1>Добро пожаловать</h1>
+      <p>Создай гостевой аккаунт и начни собирать мемы.</p>
+      <button id="guest-button" class="primary-button">ВОЙТИ КАК ГОСТЬ</button>
+      <div id="auth-status" class="status"></div>
+    </div>
+  </div>
+
+  <div id="game-screen" class="hidden">
+    <header class="topbar">
+      <a class="brand" href="#">MELLSTROY<span>RNG</span></a>
+      <div class="player-info">
+        <span id="player-name">Гость</span>
+        <span id="player-value">0 ₽</span>
+      </div>
+      <nav>
+        <button class="nav-button active" data-page="home">⌂</button>
+        <button class="nav-button" data-page="inventory">▣</button>
+        <button class="nav-button" data-page="leaderboard">♛</button>
+        <button class="nav-button" data-page="profile">♙</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="page-home" class="page">
+        <div class="hero">
+          <span class="eyebrow">THE ULTIMATE MEME COLLECTION</span>
+          <h1>Крути <span>Меллстроя!</span></h1>
+          <p>Испытай удачу. Собери редкие мемы. Попади в топ игроков.</p>
+        </div>
+
+        <div class="roulette-panel">
+          <div class="roulette-heading">
+            <span>MEME ROULETTE</span>
+            <span class="live-dot">● LIVE</span>
+          </div>
+          <div class="roulette">
+            <div class="roulette-card side-card" id="side-left">
+              <div class="meme-icon">😔</div>
+              <h3>грусть</h3>
+            </div>
+            <div class="roulette-card center-card" id="center-card">
+              <div class="meme-icon" id="center-icon">😎</div>
+              <h2 id="center-name">красавчик</h2>
+              <div class="meme-price" id="center-price">235 000 ₽</div>
+            </div>
+            <div class="roulette-card side-card" id="side-right">
+              <div class="meme-icon">🤔</div>
+              <h3>интересно</h3>
+            </div>
+          </div>
+          <div class="roulette-pointer"></div>
+          <button id="spin-button" class="primary-button spin-button">
+            <span>КРУТИ МЕЛЛСТРОЯ!</span>
+            <span>↻</span>
+          </button>
+          <div id="spin-status" class="status">Удачи!</div>
+        </div>
+
+        <div class="meme-list">
+          <div class="section-heading">
+            <h2>Мемы в рулетке</h2>
+            <span>3 ПРЕДМЕТА</span>
+          </div>
+          <div class="meme-grid">
+            <article class="meme-preview">
+              <div class="preview-icon">😎</div>
+              <h3>красавчик</h3>
+              <b>235 000 ₽</b>
+            </article>
+            <article class="meme-preview">
+              <div class="preview-icon">😔</div>
+              <h3>грусть</h3>
+              <b>850 ₽</b>
+            </article>
+            <article class="meme-preview">
+              <div class="preview-icon">🤔</div>
+              <h3>интересно</h3>
+              <b>35 000 ₽</b>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-inventory" class="page hidden">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">YOUR COLLECTION</span>
+            <h1>Инвентарь</h1>
+          </div>
+          <span id="inventory-count">0 ПРЕДМЕТОВ</span>
+        </div>
+        <div id="inventory-grid" class="meme-grid inventory-grid"></div>
+      </section>
+
+      <section id="page-leaderboard" class="page hidden">
+        <span class="eyebrow">GLOBAL RANKING</span>
+        <h1>Лидерборд</h1>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>МЕСТО</th><th>ИГРОК</th><th>СТОИМОСТЬ</th></tr></thead>
+            <tbody id="leaderboard-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="page-profile" class="page hidden">
+        <span class="eyebrow">PLAYER ACCOUNT</span>
+        <h1>Профиль</h1>
+        <div class="profile-card">
+          <div class="profile-avatar">♙</div>
+          <h2 id="profile-name">Гость</h2>
+          <p>Гостевой аккаунт</p>
+          <div class="profile-stat">
+            <span>Общая стоимость</span>
+            <b id="profile-value">0 ₽</b>
+          </div>
+          <div class="profile-stat">
+            <span>Предметов собрано</span>
+            <b id="profile-count">0</b>
+          </div>
+        </div>
+        <div class="settings-card">
+          <h2>Настройки звука</h2>
+          <label for="volume-slider">Громкость интерфейса</label>
+          <input id="volume-slider" type="range" min="0" max="100" value="50">
+          <span id="volume-value">50%</span>
+          <button id="mute-button" class="secondary-button">Выключить звук</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>MELLSTROY RNG <span>•</span> COLLECT YOUR MEMES</footer>
+  </div>
+</body>
+</html>
